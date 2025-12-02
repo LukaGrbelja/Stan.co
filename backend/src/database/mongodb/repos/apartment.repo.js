@@ -2,7 +2,7 @@ import ApartmentModel from "../models/apartment.model.js";
 
 class ApartmentRepository {
 
-    async get(entity) { return ApartmentModel.find({ owner: entity }); }
+    async get(filters) { return ApartmentModel.find(filters); }
 
     async create(entity) {
 

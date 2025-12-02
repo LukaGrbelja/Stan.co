@@ -9,7 +9,7 @@ import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import PreView from "./pages/PreView";
 import Registration from "./pages/Registration";
-import AppForm from "./pages/AppForm";
+import AptForm from "./pages/AptForm";
 import "./App.css";
 
 
@@ -26,7 +26,7 @@ function App() {
 							<Route path="hub" element={<Hub />} />
 							<Route path="chat" element={<Chat />} />
 							<Route path="profile" element={<Profile />} />
-							<Route path="appForm" element={<AppForm />} />
+							<Route path="appForm" element={<AptForm />} />
 						</Route>
 					</Route>
 					<Route path="/PI" element={<Content />}>

@@ -5,7 +5,7 @@ import TextArea from "../components/elements/Form/TextArea";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-function AppForm() {
+function AptForm() {
 
     const [formData, setFormData] = useState({
         address: "",
@@ -111,4 +111,4 @@ function AppForm() {
     );
 }
 
-export default AppForm;
+export default AptForm;

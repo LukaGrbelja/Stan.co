@@ -14,16 +14,12 @@ class ApartmentInteractor {
         return mongoResponse;
 
     }
-    async listApartments(userData) {
+    
+    async listApartments(filters) {
 
-        const user = await userRepository.get(userData);
-        if (!user) {
-            throw new Error("CredentialsError");
-        }
-
-        const mongoResponse = await ApartmentRepository.get(user._id);
+        const mongoResponse = await ApartmentRepository.get(filters);
         return mongoResponse;
-
+        
     }
 }
 

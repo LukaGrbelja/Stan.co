@@ -7,7 +7,7 @@ class ApartmentController {
 
             const newApt = request.body;
             const iResponse = await apartmentInteractor.newApartment(newApt);
-            
+
             response.status(200).send(iResponse);
 
         } catch (error) {
@@ -19,11 +19,24 @@ class ApartmentController {
 
     async listApartments(request, response, next) {
         try {
-            
-            const userName = request.params.userName;
-            const iResponse = await apartmentInteractor.listApartments(userName);
-            
+
+            const filters = { ...request.query };
+
+            if (filters.hood === "All" || filters.hood === "") {
+                delete filters.hood;
+            }
+
+            if (filters.livingArea) {
+                filters.livingArea = { $lte: Number(filters.livingArea) };
+            }
+
+            if (filters.numOfRooms) {
+                filters.numOfRooms = { $lte: Number(filters.numOfRooms) };
+            }
+
+            const iResponse = await apartmentInteractor.listApartments(filters);
             response.status(200).send(iResponse);
+
 
         } catch (error) {
 

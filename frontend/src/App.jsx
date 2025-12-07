@@ -12,7 +12,6 @@ import Registration from "./pages/Registration";
 import AptForm from "./pages/AptForm";
 import "./App.css";
 
-
 function App() {
 
 	return (
@@ -40,4 +39,4 @@ function App() {
 	)
 }
 
-export default App
+export default App;

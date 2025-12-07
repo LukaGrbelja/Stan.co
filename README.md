@@ -2,10 +2,14 @@
 
 Projekt iz kolegija Programsko inženjerstvo
 
+> [!CAUTION]
+> Prijeko potrebna provjera pravopisa!
+
 ## Sadržaj
 
 * [Instalacija](#instalacija)
 * [MERN arhitektura](#mern-arhitektura)
+* [Struktura projekta](#struktura-projekta)
 
 ## Instalacija
 
@@ -14,7 +18,7 @@ Projekt iz kolegija Programsko inženjerstvo
 * [Node.js](https://nodejs.org/en/download/)
   - Potrebno skinit npm!
 * [MongoDB Server](https://www.mongodb.com/try/download/community)
-* [MongoDB GUI](https://www.mongodb.com/try/download/compass)
+* ~~[MongoDB GUI](https://www.mongodb.com/try/download/compass)~~ (Ovo se skida automatski s serverom)
 
 #### Preuzimanje projekta
 
@@ -44,6 +48,10 @@ npm install
 
 > [!NOTE]
 > Kolekcije (tablice) bi se tribale upisat same prilikom prvotnog korištenja.
+
+> [!Important]
+> Ovo vridi samo dok se radi na lokalnoj bazi podataka.
+> Za rad na online bazi potreban je poseban URI.
 
 #### Pokretanje
 
@@ -220,7 +228,7 @@ const [arrState, setArrState] = useState([0,1,2,3,4]);
 setArrState(prevState => [ ...prevState, 5 ]);
 ```
 
-> [ERROR]
+> [!CAUTION]
 > Nikad ne stavljati setter funkciju slobodnu u logičkom dijelu nego samo kao odgovor na neki akciju korisnika ili drugi event. Odnosno setter funkcija mora biti uvjetna po nećemu inače će srušit aplikaciju. Objašnjenje u idućem dijelu.
 
 ###### Zašto stanje umjesto varijable
@@ -288,7 +296,7 @@ app.listen(PORT);// Server sluša na http://localhost:3000
 3. Event loop
    - Određuje mogu li se zahtjevi odma početi izvršavati
    - Ako zahtjev blokira proces negdje u kodu (recimo korištenjem vanjskih resursa) dodjeljuje mu se thread
-     - Kad se blokirajuća akcija obavi zahtjev se vraća u event loop
+	 - Kad se blokirajuća akcija obavi zahtjev se vraća u event loop
    - Ako ništa više ne blokira proces, zahtjev se obrađuje i šalje se odgovor
 
 #### HTTP metode i zahtjevi
@@ -304,7 +312,7 @@ app.listen(PORT);// Server sluša na http://localhost:3000
 * Odgovor - objekt `res` koji predstavlja podatke koje server šalje klijentu
   - status - postavlja HTTP statusni kod
   - send - metoda koja šalje tekstualni odgovor
-    - obično opisuje status odgovora
+	- obično opisuje status odgovora
   - json - šalje podatke u JSON formatu
   - redirect - preusmjerava na drugu rutu
 
@@ -324,8 +332,8 @@ app.listen(PORT);// Server sluša na http://localhost:3000
 
 * Rute određuju što se događa kad klijent pošalje zahtjev na određenu URI
   - putanja - objasni
-    - statična - uvijek ista
-    - dinamična - sadrži parametre
+	- statična - uvijek ista
+	- dinamična - sadrži parametre
   - HTTP metodu
   - funkciju - ona prima `req` i `res` objekte i izvršava se kad dođe zahtjev na njoj dodjeljenu putanju
 
@@ -355,11 +363,11 @@ import { Router } from "express";
 const userRouter = Router();
 
 userRouter.post("/login", (request, response, next) => {
-    // Neki kod
+	// Neki kod
 });
 
 userRouter.post("/signup", (request, response, next) => {
-    // Neki kod
+	// Neki kod
 });
 
 export default userRouter;
@@ -408,8 +416,8 @@ catch(error) {
 ```javascript
 // Asinkrono
 axios({
-    method: "GET",
-    url: "http://localhost:3000/users"
+	method: "GET",
+	url: "http://localhost:3000/users"
 })
 .then(response => response.data)
 .then(data => doSomethinWithData(data))
@@ -458,7 +466,7 @@ import mongoose from 'mongoose';
 const { connect, connection } = mongoose;
 
 connect("mongodb://localhost:27017/db", {
-    serverSelectionTimeoutMS: 5000,
+	serverSelectionTimeoutMS: 5000,
 });
 
 connection.on("connected", () => {
@@ -509,13 +517,13 @@ const userSchema = new mongoose.Schema({
   - [Preporučen tečaj](https://juniordev-express.netlify.app/react)
   - [Meni jedan od dražih kanala](https://www.youtube.com/@PedroTechnologies/search?query=mern)
   - Primjeri projekata uzlazno po složenosti
-    - [1.](https://github.com/ali-jabbari/clean-mern-stack-project/tree/main)
-    - [2.](https://github.com/fullsnacker/clean-mern-crud)
-    - [3.](https://github.com/aliakseiherman/mern-multitenancy/tree/master)
+	- [1.](https://github.com/ali-jabbari/clean-mern-stack-project/tree/main)
+	- [2.](https://github.com/fullsnacker/clean-mern-crud)
+	- [3.](https://github.com/aliakseiherman/mern-multitenancy/tree/master)
 * React
   - [Službeni program učenja](https://react.dev/learn)
   - [Službena dokumentacija](https://react.dev/reference/react)
-    - [Stara verzija](https://legacy.reactjs.org/docs/getting-started.html): možda bi čak prije preporučia za početnike
+	- [Stara verzija](https://legacy.reactjs.org/docs/getting-started.html): možda bi čak prije preporučia za početnike
   - [Primjer](https://github.com/bespoyasov/frontend-clean-architecture/tree/master)
 * Node.js
   - [Službeni program učenja](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs)
@@ -525,8 +533,8 @@ const userSchema = new mongoose.Schema({
   - [Službena dokumentacija](https://expressjs.com/en/5x/api.html)
   - [Bolji tutorial](https://www.javascripttutorial.net/express-tutorial/)
   - Primjeri
-    - [1.](https://github.com/xaviernouaille/express-clean-architecture/tree/main)
-    - [2.](https://github.com/Z3r0J/nodejs-clean-architecture/tree/main)
+	- [1.](https://github.com/xaviernouaille/express-clean-architecture/tree/main)
+	- [2.](https://github.com/Z3r0J/nodejs-clean-architecture/tree/main)
 
 ## Struktura projekta
 

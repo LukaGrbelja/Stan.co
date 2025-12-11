@@ -9,7 +9,7 @@ nav {
 
 .container {
 	margin: auto;
-	margin-top: 10%;
+	margin-top: 5%;
 }
 
 .round {
@@ -31,4 +31,26 @@ span {
 .clear {
 	clear: both;
 	height: 150px;
+}
+
+.icon {
+	width: 50%;
+}
+
+@media (min-width: 501px) {
+	.nav-item {
+		margin-right: 2%;
+		margin-left: 2%;
+	}
+}
+
+@media (min-width: 768px) {
+	.nav-item {
+		margin-right: 5%;
+		margin-left: 5%;
+	}
+}
+
+.center {
+	text-align: center;
 }

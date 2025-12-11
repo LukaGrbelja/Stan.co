@@ -1,7 +1,6 @@
-function Select({ data, children }) {
+function Select({ data }) {
 
-    const { name, label, handleChange } = data;
-    const options = children.split(" ");
+    const { name, label, handleChange, options } = data;
 
     return (
         <div className="mb-3">

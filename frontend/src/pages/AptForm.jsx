@@ -13,7 +13,8 @@ function AptForm() {
         livingArea: 0,
         numOfBeds: 0,
         numOfRooms: 0,
-        description: ""
+        description: "",
+        locationCode: []
     });
 
     const [formResponse, setFormResponse] = useState("");
@@ -33,16 +34,27 @@ function AptForm() {
             setFormResponse("Molimo unesite sve podatke");
         }
         else {
-            setFormResponse("Dobar");
-            axios.post("http://localhost:4000/apt/createApt", formData)
-                .then(response => response.data)
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${formData.address}`)
+                .then(res => res.json())
                 .then(data => {
-                    console.log(data);
-                    navigate("../hub");
-                })
-                .catch(error => {
-                    console.error(error.response.data.message, error);
-                    setFormResponse("Proces neuspjesan");
+                    switch (data.length) {
+                        case 0:
+                            setFormResponse("Ne postojeća adresa!");
+                            break;
+                        default:
+                            setFormData({ ...formData, locationCode: [data[0].lat, data[0].lon] });
+                            axios.post("http://localhost:4000/apt/createApt", formData)
+                                .then(response => response.data)
+                                .then(_data => {
+                                    console.log(_data);
+                                    navigate("../hub");
+                                })
+                                .catch(error => {
+                                    console.error(error.response.data.message, error);
+                                    setFormResponse("Proces neuspjesan");
+                                });
+                            break;
+                    }
                 });
         }
     }

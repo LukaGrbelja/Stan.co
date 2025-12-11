@@ -19,8 +19,15 @@ const UserContextProvider = ({ children }) => {
         })
     }
 
+    const logOut = () => {
+        setUser({
+            userName: "",
+            userType: ""
+        });
+    }
+
     return (
-        <UserContext.Provider value={{ user, logIn }}>
+        <UserContext.Provider value={{ user, logIn, logOut }}>
             {children}
         </UserContext.Provider>
     );

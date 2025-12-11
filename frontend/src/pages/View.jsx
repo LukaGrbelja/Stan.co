@@ -6,12 +6,17 @@ import Range from "../components/elements/Form/Range";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+
 function View() {
     const [aptList, setAptList] = useState([]);
     const [viewType, setViewType] = useState("list");
     const [formData, setFormData] = useState({
         options: {
-            options: "",
+            options: [],
             rangeMax: 0,
             rangeMaxTwo: 0
         },
@@ -29,10 +34,11 @@ function View() {
 
                 setAptList(data);
 
-                let hoods = new Set();
+                let hoods = ["All"];
                 data.forEach(apt => {
-                    hoods.add(apt.hood);
+                    hoods.push(apt.hood);
                 });
+
                 setFormData({
                     data: {
                         hood: "",
@@ -40,7 +46,7 @@ function View() {
                         numOfRooms: Math.max(...data.map(apt => apt.numOfRooms))
                     },
                     options: {
-                        options: "All " + [...hoods].join(" "),
+                        options: hoods,
                         rangeMax: Math.max(...data.map(apt => apt.livingArea)),
                         rangeMaxTwo: Math.max(...data.map(apt => apt.numOfRooms))
                     }
@@ -80,10 +86,9 @@ function View() {
                             label: "Odaberi način rada",
                             handleChange: (selectValue) => {
                                 setFormData({ ...formData, data: { ...formData.data, hood: selectValue } });
-                            }
-                        }}>
-                            {formData.options.options}
-                        </Select>
+                            },
+                            options: formData.options.options
+                        }} />
                         <Range data={{
                             name: "squareSurface",
                             label: "Kvadratura",
@@ -107,7 +112,22 @@ function View() {
                 </div>
             </div>
             <ToggleSwitch data={{ label1: "Lista", label2: "Karta", saveValue: handleChange }} />
-            {viewType === "list" ? aptList.map(apt => <AptCard key={apt._id} aptData={apt} />) : "Under construction"}
+            {
+                viewType === "list" ?
+                    aptList.map(apt => <AptCard key={apt._id} aptData={apt} />)
+                    :
+                    <MapContainer center={[43.5089, 16.4392]} zoom={13} style={{ height: "500px", width: "100%" }}>
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        {aptList.map(apt =>
+                            <Marker key={apt._id} position={apt.locationCode}>
+                                <Popup>{apt.address}</Popup>
+                            </Marker>
+                        )}
+                    </MapContainer>
+            }
         </>
     )
 }

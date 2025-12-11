@@ -9,7 +9,7 @@ function ToggleSwitch({ data }) {
     } = data;
 
     return (
-        <div className="mb-3">
+        <div className="mb-3 center">
             <p className="span">{label1}</p>
             <input type="checkbox" id="switch" onChange={(e) => saveValue(e.target.checked)}/>
             <label className="switch" htmlFor="switch">Toggle</label>

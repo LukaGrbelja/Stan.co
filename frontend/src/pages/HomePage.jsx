@@ -1,8 +1,7 @@
 function HomePage() {
     return (
         <>
-            forma za trazenje stanova
-            novosti???
+            <h1>Dobrodošli na Stan.CO</h1>
         </>
     )
 }

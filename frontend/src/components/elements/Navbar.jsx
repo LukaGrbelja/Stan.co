@@ -1,26 +1,32 @@
 import NavItem from "./Navitem.jsx";
 
+import home from "../../assets/pictures/home.png";
+import search from "../../assets/pictures/search.png";
+import add from "../../assets/pictures/add.png";
+import chat from "../../assets/pictures/chat.png";
+import person from "../../assets/pictures/person.png";
+
 function Navbar() {
 
     const properties = [
         {
-            value: "home",
+            value: home,
             to: ""
         },
         {
-            value: "view",
+            value: search,
             to: "view"
         },
         {
-            value: "hub",
+            value: add,
             to: "hub"
         },
         {
-            value: "chat",
+            value: chat,
             to: "chat"
         },
         {
-            value: "profile",
+            value: person,
             to: "profile"
         },
     ];
@@ -32,6 +38,7 @@ function Navbar() {
                     <NavItem key={element.value} value={element.value} path={element.to} />
                 )}
             </ul>
+            {/* <small><a href="https://www.flaticon.com/free-icons/ui" title="ui icons">Ui icons created by Rifaldi Ridha Aisy - Flaticon</a></small> */}
         </nav>
     );
 }

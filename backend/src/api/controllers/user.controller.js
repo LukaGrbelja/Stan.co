@@ -1,5 +1,6 @@
 import userInteractor from "../../database/interactors/user.interactor.js";
 import { HttpError } from "../middlewares/errorHandler.js";
+import JWTHandler from "../../database/jsonwt/index.js";
 
 // primanje podataka iz axios requesta
 // prosljedivanje podataka
@@ -10,9 +11,18 @@ class UserController {
         try {
 
             const user = request.body;
-            const data = await userInteractor.logIn(user);
+            const dbResponse = await userInteractor.logIn(user);
 
-            response.status(200).send(data);
+            const responseObject = {
+                userName: dbResponse.userName,
+                userType: dbResponse.userType
+            }
+
+            const token = JWTHandler.generateToken(responseObject);
+
+            responseObject.token = token;
+
+            response.status(200).send(responseObject);
 
         } catch (error) {
 

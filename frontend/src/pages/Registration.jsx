@@ -132,11 +132,9 @@ function Registration() {
                 label: "Odaberi način rada",
                 handleChange: (selectValue) => {
                     setFormData({ ...formData, userType: selectValue });
-                }
-            }}>
-                Cimer
-                Iznajmljivac
-            </Select>
+                },
+                options: ["Cimer", "Iznajmljivac"]
+            }} />
             <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
             <span>
                 Lozinka bi trebala sadržavati

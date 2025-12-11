@@ -11,6 +11,8 @@ import PreView from "./pages/PreView";
 import Registration from "./pages/Registration";
 import AptForm from "./pages/AptForm";
 import "./App.css";
+import ErrorPage from "./pages/Error";
+import RedirectComponent from "./pages/RedirectComponent";
 
 function App() {
 
@@ -32,7 +34,10 @@ function App() {
 						<Route index element={<PreView />} />
 						<Route path="registration" element={<Registration />} />
 					</Route>
-					<Route path='*' element={<>Error</>} />
+					<Route path='*' element={<Content />}>
+						<Route index element={<RedirectComponent />} />
+						<Route path='*' element={<ErrorPage />}/>
+					</Route>
 				</Routes>
 			</BrowserRouter>
 		</UserContextProvider>

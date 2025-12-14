@@ -41,6 +41,7 @@ function PreView() {
     return (
         <div className="row">
             <div className="col-lg-6 col-12 p-3">
+                <center className="mb-4"><h1>Prijava</h1></center>
                 <Form handleSubmit={handleSubmit}>
                     <Input data={{
                         name: "username",
@@ -63,11 +64,12 @@ function PreView() {
                     <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
                     {formResponse}
                 </Form>
+                <Link to={""}>Nastavite kao gost</Link>
             </div>
             {window.innerWidth < 992 ? <hr /> : false}
-            <div className="col-lg-6 col-12 p-3 text-center mt-5">
+            <div className="col-lg-6 col-12 p-5 text-center regdiv">
                 <h4>Nemate korisnički račun?</h4>
-                <Link to="registration" className="btn btn-primary mt-2">
+                <Link to="registration" className="btn btn-primary mt-2 mb-5">
                     Stvori račun
                 </Link>
             </div>

@@ -12,7 +12,11 @@ function Hub() {
 
     useEffect(() => {
         if (user.userType == "Iznajmljivac") {
-            axios.get(`http://localhost:4000/apt/list/${user.userName}`)
+            axios({
+                method: "GET",
+                url: "http://localhost:4000/apt/list/",
+                params: { userName: user.userName }
+            })
                 .then(response => response.data)
                 .then(data => setAptList(data))
                 .catch(error => console.error(error));
@@ -25,7 +29,7 @@ function Hub() {
                 <>
                     <h1>Sucelje za iznajmljivaca</h1>
                     <h2>Moji stanovi</h2>
-                    {aptList.map(apt => <AptCard />)}
+                    {aptList.map(apt => <AptCard key={apt._id} aptData={apt} />)}
                     <Link to="../appForm" className="btn btn-primary mt-2">
                         Dodaj novi stan
                     </Link>

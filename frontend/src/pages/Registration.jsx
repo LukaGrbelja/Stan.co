@@ -5,6 +5,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
+const validateFileAsPhoto = (file) => {
+    const isFilePhoto = [
+        "image/apng",
+        "image/bmp",
+        "image/gif",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+        "image/svg+xml",
+        "image/tiff",
+        "image/webp",
+        "image/x-icon",
+    ].includes(file.type);
+}
+
 function Registration() {
 
     const [formData, setFormData] = useState({
@@ -15,8 +30,9 @@ function Registration() {
         password: "",
         passwordAgain: "",
         userType: "Cimer"
-
     });
+
+    const [profilePictureFile, setPfp] = useState({});
 
     const [formResponse, setFormResponse] = useState("");
     const [passwordResponse, setPasswordResponse] = useState({
@@ -37,12 +53,29 @@ function Registration() {
         });
     }, [formData.password]);
 
-
     const navigate = useNavigate();
 
     const handleSubmit = () => {//validiraj email
-        if (Object.keys(formData).some(key => !formData[key]?.trim())) {
+        if (!profilePictureFile.name || Object.keys(formData).some(key => !formData[key]?.trim())) {
             setFormResponse("Molimo unesite sve podatke");
+        }
+        else if (![
+            "image/apng",
+            "image/bmp",
+            "image/gif",
+            "image/jpeg",
+            "image/jpg",
+            "image/pjpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/tiff",
+            "image/webp",
+            "image/x-icon",
+        ].includes(profilePictureFile.type)) {
+            setFormResponse("Datoteka triba biti slika.");
+        }
+        else if (profilePictureFile.size > 5 * 1024 * 1024) {
+            setFormResponse("Slika ne smije biti veća od 5MB.");
         }
         else if (
             !Object.entries(passwordResponse).every(([key, value]) => {
@@ -56,8 +89,11 @@ function Registration() {
             setFormResponse("Lozinke se ne podudaraju");
         }
         else {
-            setFormResponse("");
-            axios.post("http://localhost:4000/auth/signup", formData)
+            setFormResponse("GG");
+            const params = new FormData();
+            params.append("image", profilePictureFile);
+            params.append("userData", JSON.stringify(formData));
+            axios.post("http://localhost:4000/auth/signup", params)
                 .then(response => response.data)
                 .then(data => {
                     console.log(data);
@@ -135,6 +171,17 @@ function Registration() {
                 },
                 options: ["Cimer", "Iznajmljivac"]
             }} />
+            <div className="mb-3">
+                <label htmlFor="formFile" className="form-label">Default file input example</label>
+                <input
+                    className="form-control" type="file" id="formFile" accept="image/*"
+                    onChange={(e) => {
+                        setPfp(e.target.files[0] || {});
+                        validateFileAsPhoto(e.target.files[0]);
+
+                    }}
+                />
+            </div>
             <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
             <span>
                 Lozinka bi trebala sadržavati

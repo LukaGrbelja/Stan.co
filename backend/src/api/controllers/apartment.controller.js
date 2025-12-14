@@ -1,4 +1,5 @@
 import apartmentInteractor from "../../database/interactors/apartment.interactor.js";
+import userRepo from "../../database/mongodb/repos/user.repo.js"; //makni podhitno // triba se pojavljivat tek u interactoru// strukturiraj serrvise u Interactor datoteki
 import { HttpError } from "../middlewares/errorHandler.js";
 
 class ApartmentController {
@@ -22,16 +23,29 @@ class ApartmentController {
 
             const filters = { ...request.query };
 
-            if (filters.hood === "All" || filters.hood === "") {
-                delete filters.hood;
-            }
+            if (!filters._id) {
 
-            if (filters.livingArea) {
-                filters.livingArea = { $lte: Number(filters.livingArea) };
-            }
+                if (filters.hood === "All" || filters.hood === "") {
+                    delete filters.hood;
+                }
 
-            if (filters.numOfRooms) {
-                filters.numOfRooms = { $lte: Number(filters.numOfRooms) };
+                if (filters.livingArea) {
+                    filters.livingArea = { $lte: Number(filters.livingArea) };
+                }
+
+                if (filters.numOfRooms) {
+                    filters.numOfRooms = { $lte: Number(filters.numOfRooms) };
+                }
+
+                if (filters.userName) {
+                    await userRepo.get(filters.userName)
+                        .then(data => data._id)
+                        .then(id => {
+                            delete filters.userName;
+                            filters.owner = id
+                        });// Odluci se za sintaksu koristi ili async/await ili then/catch
+                }
+
             }
 
             const iResponse = await apartmentInteractor.listApartments(filters);

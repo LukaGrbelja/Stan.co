@@ -39,7 +39,12 @@ class UserController {
     async signUp(request, response, next) {
         try {
 
-            const newUser = request.body;
+            const newUser = {
+                ...JSON.parse(request.body.userData),
+                profilePicture: request.file.path
+
+            }
+            
             await userInteractor.signUp(newUser);
 
             response.status(201).send(newUser);

@@ -7,9 +7,27 @@ nav {
 	justify-content: center;
 }
 
+#root {
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-image: url("./assets/pictures/homebgp.png");
+	background-repeat: space;
+	background-size: 300px 300px;
+}
+
+/*<a href="https://www.flaticon.com/free-icons/ui" title="ui icons">Ui icons created by Iconpro86 - Flaticon</a>*/
+
 .container {
 	margin: auto;
 	margin-top: 5%;
+}
+
+.regdiv {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .round {

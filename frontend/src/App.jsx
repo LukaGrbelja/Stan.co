@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import PreView from "./pages/PreView";
 import Registration from "./pages/Registration";
 import AptForm from "./pages/AptForm";
+import ApartmentView from "./pages/ApartmentView";
 import "./App.css";
 import ErrorPage from "./pages/Error";
 import RedirectComponent from "./pages/RedirectComponent";
@@ -28,6 +29,7 @@ function App() {
 							<Route path="chat" element={<Chat />} />
 							<Route path="profile" element={<Profile />} />
 							<Route path="appForm" element={<AptForm />} />
+							<Route path="apartmentView/:id" element={<ApartmentView />} />
 						</Route>
 					</Route>
 					<Route path="/PI" element={<Content />}>

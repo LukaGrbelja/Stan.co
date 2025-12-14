@@ -1,8 +1,10 @@
 import imgPlaceholder from "../../assets/pictures/aptPlaceholderImg.webp";
+import { Link } from "react-router";
 
 function AptCard({ aptData }) {
 
     let {
+        _id,
         address,
         hood,
         livingArea,
@@ -10,7 +12,7 @@ function AptCard({ aptData }) {
         numOfRooms,
         pictures,
         description
-    } = aptData
+    } = aptData;
 
     return (
         <div className="card mb-3">
@@ -33,7 +35,9 @@ function AptCard({ aptData }) {
                         </p>
                         <p className="card-text">
                             <small className="text-body-secondary">
-                                <a href="#" className="btn btn-primary">Detalji</a>
+                                <Link to={"/UI/apartmentView/" + _id} className="btn btn-primary mt-2">
+                                    Detalji
+                                </Link>
                             </small>
                         </p>
                     </div>

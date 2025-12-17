@@ -5,6 +5,21 @@ import TextArea from "../components/elements/Form/TextArea";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+const validateFileAsPhoto = (file) => {
+    return [
+        "image/apng",
+        "image/bmp",
+        "image/gif",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png",
+        "image/svg+xml",
+        "image/tiff",
+        "image/webp",
+        "image/x-icon",
+    ].includes(file.type);
+}
+
 function AptForm() {
 
     const [formData, setFormData] = useState({
@@ -18,6 +33,7 @@ function AptForm() {
     });
 
     const [formResponse, setFormResponse] = useState("");
+    const [apartmentPictures, setAp] = useState([]);
 
     const navigate = useNavigate();
 
@@ -33,6 +49,12 @@ function AptForm() {
         })) {
             setFormResponse("Molimo unesite sve podatke");
         }
+        else if (![...apartmentPictures].length) {
+            setFormResponse("Molimo unesite sve slike");
+        }
+        else if (![...apartmentPictures].reduce((accumulator, currentValue) => accumulator && validateFileAsPhoto(currentValue), true)) {
+            setFormResponse("Priložene datoteke nisu u obliku slike");
+        }
         else {
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${formData.address}`)
                 .then(res => res.json())
@@ -43,15 +65,18 @@ function AptForm() {
                             break;
                         default:
                             setFormData({ ...formData, locationCode: [data[0].lat, data[0].lon] });
-                            axios.post("http://localhost:4000/apt/createApt", formData)
+                            const params = new FormData();
+                            [...apartmentPictures].forEach(picture => params.append("images", picture));
+                            params.append("userData", JSON.stringify(formData));
+                            axios.post("http://localhost:4000/apt/createApt", params)
                                 .then(response => response.data)
                                 .then(_data => {
                                     console.log(_data);
-                                    navigate("../hub");
+                                    navigate("/hub");
                                 })
                                 .catch(error => {
                                     console.error(error.response.data.message, error);
-                                    setFormResponse("Proces neuspjesan");
+                                    //setFormResponse("Proces neuspjesan");
                                 });
                             break;
                     }
@@ -85,7 +110,7 @@ function AptForm() {
                     name: "livingArea",
                     label: "Kvadratura (m^2)",
                     type: "number",
-                    placeholder: "Unesite povrsinu stana",
+                    placeholder: "Unesite površinu stana",
                     saveValue: (inputValue) => {
                         setFormData({ ...formData, livingArea: Number(inputValue) });
                     }
@@ -94,7 +119,7 @@ function AptForm() {
                     name: "numOfBeds",
                     label: "Broj lezaja",
                     type: "number",
-                    placeholder: "Unesite broj lezaja",
+                    placeholder: "Unesite broj ležaja",
                     saveValue: (inputValue) => {
                         setFormData({ ...formData, numOfBeds: Number(inputValue) });
                     }
@@ -108,6 +133,15 @@ function AptForm() {
                         setFormData({ ...formData, numOfRooms: Number(inputValue) });
                     }
                 }} />
+                <div className="mb-3">
+                    <label htmlFor="formFileMultiple" className="form-label">Multiple files input example</label>
+                    <input
+                        className="form-control" type="file" id="formFileMultiple" accept="image/*" multiple required
+                        onChange={(e) => {
+                            setAp(e.target.files);
+                        }}
+                    />
+                </div>
                 <TextArea data={{
                     name: "description",
                     label: "Opis",
@@ -116,7 +150,7 @@ function AptForm() {
                     }
 
                 }} />
-                <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
+                <button type="submit" className="btn btn-primary w-100">Dodaj stan</button>
                 {formResponse}
             </Form>
         </>

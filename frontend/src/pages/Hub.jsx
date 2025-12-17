@@ -29,7 +29,13 @@ function Hub() {
                 <>
                     <h1>Sucelje za iznajmljivaca</h1>
                     <h2>Moji stanovi</h2>
-                    {aptList.map(apt => <AptCard key={apt._id} aptData={apt} />)}
+                    {
+                        aptList.length !== 0 ?
+                            aptList.map(apt => <AptCard key={apt._id} aptData={apt} />)
+                            :
+
+                            <li class="list-group-item bg-dark-subtle w-100 border border-primary-subtle round p-2">Trenutno nemate stanova</li>
+                    }
                     <Link to="../appForm" className="btn btn-primary mt-2">
                         Dodaj novi stan
                     </Link>

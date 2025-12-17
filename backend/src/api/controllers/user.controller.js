@@ -1,6 +1,7 @@
 import userInteractor from "../../database/interactors/user.interactor.js";
 import { HttpError } from "../middlewares/errorHandler.js";
 import JWTHandler from "../../database/jsonwt/index.js";
+import bcrypt from "bcryptjs";
 
 // primanje podataka iz axios requesta
 // prosljedivanje podataka
@@ -15,7 +16,8 @@ class UserController {
 
             const responseObject = {
                 userName: dbResponse.userName,
-                userType: dbResponse.userType
+                userType: dbResponse.userType,
+                profilePicture: dbResponse.profilePicture
             }
 
             const token = JWTHandler.generateToken(responseObject);
@@ -42,15 +44,29 @@ class UserController {
             const newUser = {
                 ...JSON.parse(request.body.userData),
                 profilePicture: request.file.path
-
             }
-            
-            await userInteractor.signUp(newUser);
+
+            bcrypt.genSalt(10, (err, salt) => {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    bcrypt.hash(newUser.password, salt, async (err, hash) => {
+                        if (err) {
+                            throw err;
+                        }
+                        else {
+                            newUser.password = hash;
+                            await userInteractor.signUp(newUser);
+                        }
+                    });
+                }
+            });
 
             response.status(201).send(newUser);
 
         } catch (error) {
-            
+
             if (error.message == "E11000U") {
                 error.message = "Koristeno korisnicko ime!";
                 next(new HttpError(409, error));
@@ -63,6 +79,29 @@ class UserController {
                 next(new HttpError(500, error));
             }
 
+        }
+    }
+    async update(request, response, next) {
+        try {
+            const filter = { userName: request.body.userName };
+            const data = { $set: { additionalData: request.body.data } };
+
+            await userInteractor.update(filter, data);
+
+            response.status(201).send({});
+
+        } catch (error) {
+            next(new HttpError(500, error));
+        }
+    }
+    async get(request, response, next) {
+        try {
+            const data = await userInteractor.get(request.query.userName);
+
+            response.status(201).send(data.additionalData);
+
+        } catch (error) {
+            next(new HttpError(500, error));
         }
     }
 }

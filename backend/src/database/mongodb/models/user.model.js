@@ -7,7 +7,8 @@ const UserSchema = new Schema({
     name: { type: String, required: true },
     surname: { type: String, required: true },
     userType: { type: String, required: true },
-    profilePicture: { type: String, required: true }
+    profilePicture: { type: String, required: true },
+    additionalData: { type: Object }
 });
 
 const UserModel = model("User", UserSchema, "users");

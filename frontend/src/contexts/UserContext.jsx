@@ -8,21 +8,24 @@ const UserContextProvider = ({ children }) => {
 
     const [user, setUser] = useState({
         userName: "",
-        userType: ""
+        userType: "",
+        profilePicture: ""
     });
 
     const logIn = ({ userData }) => {
-        const { userName, userType } = userData;
+        const { userName, userType, profilePicture } = userData;
         setUser({
             userName: userName,
-            userType: userType
+            userType: userType,
+            profilePicture: profilePicture
         })
     }
 
     const logOut = () => {
         setUser({
             userName: "",
-            userType: ""
+            userType: "",
+            profilePicture: ""
         });
     }
 

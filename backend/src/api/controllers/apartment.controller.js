@@ -6,7 +6,11 @@ class ApartmentController {
     async newApartment(request, response, next) {
         try {
 
-            const newApt = request.body;
+            const newApt = {
+                ...JSON.parse(request.body.userData),
+                pictures: request.files.map(file => file.path)
+            };
+
             const iResponse = await apartmentInteractor.newApartment(newApt);
 
             response.status(200).send(iResponse);
@@ -25,7 +29,7 @@ class ApartmentController {
 
             if (!filters._id) {
 
-                if (filters.hood === "All" || filters.hood === "") {
+                if (filters.hood === "Sve lokacije" || filters.hood === "") {
                     delete filters.hood;
                 }
 

@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";//Pomakni u kontroler
 import userRepository from "../mongodb/repos/user.repo.js";
 
 // pozivanje funkcija koje komuniciraju s bazom
@@ -7,24 +8,24 @@ import userRepository from "../mongodb/repos/user.repo.js";
 
 class UserInteractor {
 
-    async logIn(userData) {
+    async logIn(userData) {// veći dio potrebno pomaknuti u kontroler
 
         const existingUser = await userRepository.get(userData.userName);
         if (!existingUser) {
             throw new Error("CredentialsError");
         }
 
-        const isValidPassword = userData.password == existingUser.password;
-        if (!isValidPassword) {
+        let passwordValidity = bcrypt.compareSync(userData.password, existingUser.password);
+
+        if (!passwordValidity) {
             throw new Error("CredentialsError");
-        }
+        };
 
         return existingUser;
-
     }
 
     async signUp(userData) {
-        
+
         let existingUser = await userRepository.get(userData.userName);
         if (existingUser) {
             throw new Error("E11000U");
@@ -36,12 +37,19 @@ class UserInteractor {
         }
 
 
-        delete userData.passwordAgain;
-        //hash
+        delete userData.passwordAgain;//kontroler
         const newUser = await userRepository.create(userData);
         return newUser;
 
 
+    }
+
+    async update(filter, data) {
+        await userRepository.update(filter, data);
+    }
+
+    async get(filter) {
+        return await userRepository.get(filter);
     }
 
 }

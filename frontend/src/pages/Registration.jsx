@@ -1,24 +1,10 @@
 import Form from "../components/elements/Form/Form";
 import Input from "../components/elements/Form/Input";
 import Select from "../components/elements/Form/Select";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
 import { useNavigate } from "react-router";
-
-const validateFileAsPhoto = (file) => {
-    const isFilePhoto = [
-        "image/apng",
-        "image/bmp",
-        "image/gif",
-        "image/jpeg",
-        "image/pjpeg",
-        "image/png",
-        "image/svg+xml",
-        "image/tiff",
-        "image/webp",
-        "image/x-icon",
-    ].includes(file.type);
-}
 
 function Registration() {
 
@@ -33,7 +19,6 @@ function Registration() {
     });
 
     const [profilePictureFile, setPfp] = useState({});
-
     const [formResponse, setFormResponse] = useState("");
     const [passwordResponse, setPasswordResponse] = useState({
         lowerCaseLetter: false,
@@ -53,6 +38,7 @@ function Registration() {
         });
     }, [formData.password]);
 
+    const userContext = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleSubmit = () => {//validiraj email
@@ -89,14 +75,13 @@ function Registration() {
             setFormResponse("Lozinke se ne podudaraju");
         }
         else {
-            setFormResponse("GG");
             const params = new FormData();
             params.append("image", profilePictureFile);
             params.append("userData", JSON.stringify(formData));
             axios.post("http://localhost:4000/auth/signup", params)
                 .then(response => response.data)
                 .then(data => {
-                    console.log(data);
+                    userContext.logIn({ userData: data });
                     navigate("/UI");
                 })
                 .catch(error => {
@@ -154,11 +139,18 @@ function Registration() {
                     setFormData({ ...formData, password: inputValue });
                 }
             }} />
+            <span>
+                Lozinka bi trebala sadržavati
+                <span className={passwordResponse.lowerCaseLetter ? "success" : "fail"}> malo slovo,</span>
+                <span className={passwordResponse.upperCaseLetter ? "success" : "fail"}> veliko slovo,</span>
+                <span className={passwordResponse.number ? "success" : "fail"}> broj </span> i
+                <span className={passwordResponse.length >= 8 ? "success" : "fail"}> minimalno 8 znakova.</span>
+            </span>
             <Input data={{
                 name: "passwordAgain",
-                label: "Lozinka ponovo",
+                label: "Ponovi lozinku",
                 type: "password",
-                placeholder: "Unesite lozinku",
+                placeholder: "Potvrdite lozinku",
                 saveValue: (inputValue) => {
                     setFormData({ ...formData, passwordAgain: inputValue });
                 }
@@ -169,27 +161,18 @@ function Registration() {
                 handleChange: (selectValue) => {
                     setFormData({ ...formData, userType: selectValue });
                 },
-                options: ["Cimer", "Iznajmljivac"]
+                options: ["Cimer", "Iznajmljivač"]
             }} />
             <div className="mb-3">
-                <label htmlFor="formFile" className="form-label">Default file input example</label>
+                <label htmlFor="formFile" className="form-label">Dodaj sliku</label>
                 <input
-                    className="form-control" type="file" id="formFile" accept="image/*"
+                    className="form-control" type="file" id="formFile" accept="image/*" required
                     onChange={(e) => {
                         setPfp(e.target.files[0] || {});
-                        validateFileAsPhoto(e.target.files[0]);
-
                     }}
                 />
             </div>
-            <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
-            <span>
-                Lozinka bi trebala sadržavati
-                <span className={passwordResponse.lowerCaseLetter ? "success" : "fail"}> malo slovo,</span>
-                <span className={passwordResponse.upperCaseLetter ? "success" : "fail"}> veliko slovo,</span>
-                <span className={passwordResponse.number ? "success" : "fail"}> broj </span> i
-                <span className={passwordResponse.length >= 8 ? "success" : "fail"}> minimalno 8 znakova.</span>
-            </span>
+            <button type="submit" className="btn btn-primary w-100">Registriraj se</button>
             {formResponse}
         </Form>
     )

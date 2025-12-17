@@ -4,7 +4,7 @@ import userRepository from "../mongodb/repos/user.repo.js";
 class ApartmentInteractor {
     async newApartment(aptData) {
 
-        const user = await userRepository.get("PrviKorisnik");
+        const user = await userRepository.get("Matem");
         if (!user) {
             throw new Error("CredentialsError");
         }

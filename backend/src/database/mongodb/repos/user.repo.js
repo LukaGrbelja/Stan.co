@@ -11,6 +11,9 @@ class UserRepository {
         return newUser;
 
     }
+
+    async update(filter, data) { return UserModel.updateOne(filter, data); }
+
 }
 
 export default new UserRepository;

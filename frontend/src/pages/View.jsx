@@ -5,6 +5,7 @@ import Select from "../components/elements/Form/Select";
 import Range from "../components/elements/Form/Range";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router";
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
@@ -34,7 +35,7 @@ function View() {
 
                 setAptList(data);
 
-                let hoods = ["All"];
+                let hoods = ["Sve lokacije"];
                 data.forEach(apt => {
                     hoods.push(apt.hood);
                 });
@@ -83,7 +84,7 @@ function View() {
                     <Form handleSubmit={handleSubmit}>
                         <Select data={{
                             name: "useValue",
-                            label: "Odaberi način rada",
+                            label: "Odaberi područje / kvart",
                             handleChange: (selectValue) => {
                                 setFormData({ ...formData, data: { ...formData.data, hood: selectValue } });
                             },
@@ -91,7 +92,7 @@ function View() {
                         }} />
                         <Range data={{
                             name: "squareSurface",
-                            label: "Kvadratura",
+                            label: "Maksimalna kvadratura",
                             max: formData.options.rangeMax,
                             currentValue: formData.data.livingArea,
                             saveValue: (rangeValue) => {
@@ -100,14 +101,14 @@ function View() {
                         }} />
                         <Range data={{
                             name: "numOfRooms",
-                            label: "Broj soba",
+                            label: "Maksimalni broj soba",
                             max: formData.options.rangeMaxTwo,
                             currentValue: formData.data.numOfRooms,
                             saveValue: (rangeValue) => {
                                 setFormData({ ...formData, data: { ...formData.data, numOfRooms: Number(rangeValue) } });
                             }
                         }} />
-                        <button type="submit" className="btn btn-primary w-100">Prijavi se</button>
+                        <button type="submit" className="btn btn-primary w-100">Pretraži</button>
                     </Form>
                 </div>
             </div>
@@ -123,11 +124,24 @@ function View() {
                         />
                         {aptList.map(apt =>
                             <Marker key={apt._id} position={apt.locationCode}>
-                                <Popup>{apt.address}</Popup>
+                                <Popup>
+                                    <div classname="card" style={{ width: "8rem" }}>
+                                        <img src={apt.pictures[0]} classname="card-img-top" alt="..." style={{ width: "8rem" }} />
+                                        <hr />
+                                        Adresa: {apt.address}
+                                        <hr />
+                                        Površina: {apt.livingArea}
+                                        <hr />
+                                        <Link to={"/UI/apartmentView/" + apt._id} className="btn btn-primary text-body-secondary">
+                                            Detalji
+                                        </Link>
+                                    </div>
+                                </Popup>
                             </Marker>
                         )}
                     </MapContainer>
             }
+            <div className="mb-5"></div>
         </>
     )
 }

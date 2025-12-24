@@ -1,0 +1,128 @@
+/* ROOT WRAPPER */
+.chat-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== SIDEBAR (LISTA RAZGOVORA) ========== */
+
+.chat-page .list-group-item {
+    padding: 14px 18px;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.chat-page .list-group-item:hover {
+    background-color: #f1f3f5;
+}
+
+/* ========== CHAT WINDOW ========== */
+
+.chat-page .col-lg-8,
+.chat-page .col-12 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0 !important;
+}
+
+.chat-page .col-lg-8 {
+    padding-left: 5% !important;
+}
+
+/* HEADER (prvi div u chat windowu) */
+.chat-page .col-lg-8>div>div:first-child,
+.chat-page .col-12>div>div:first-child {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Avatar u headeru */
+.chat-page .col-lg-8>div>div:first-child img,
+.chat-page .col-12>div>div:first-child img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+/* ========== PORUKE ========== */
+
+/* Messages container (flex-grow-1) */
+.chat-page .flex-grow-1 {
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #f8f9fa;
+}
+
+/* Svaka poruka (div unutar .d-flex) */
+.chat-page .d-flex>div {
+    max-width: 100%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    word-break: break-word;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Poruke drugih (lijevo) */
+.chat-page .d-flex:not(.justify-content-end)>div {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #212529;
+}
+
+/* Moje poruke (desno) */
+.chat-page .justify-content-end>div {
+    background-color: #007bff;
+    color: white;
+}
+
+/* ========== INPUT BAR ========== */
+
+.chat-page .border-top {
+    padding: 12px 16px;
+    background-color: #ffffff;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+/* Input */
+.chat-page input.form-control {
+    border-radius: 20px;
+    padding: 10px 16px;
+}
+
+/* Gumb */
+.chat-page button {
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 991px) {
+
+    /* Sidebar nestaje na mobitelu */
+    .chat-page .col-lg-4 {
+        display: none !important;
+    }
+
+    /* Chat zauzima cijeli ekran */
+    .chat-page .col-lg-8 {
+        width: 100% !important;
+    }
+}

@@ -20,4 +20,8 @@ userRouter.get("/data", (request, response, next) => {
     UserController.get(request, response, next)
 });
 
+userRouter.get("/decode", (request, response, next) => {
+    UserController.decode(request, response, next)
+});
+
 export default userRouter;

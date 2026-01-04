@@ -14,7 +14,7 @@ function Profile() {
         shortBio: "",
         livingAdress: "",
         tenantChars: ""
-    })
+    });
 
     const { user, logOut } = useContext(UserContext);
     const nav = useNavigate();
@@ -28,7 +28,7 @@ function Profile() {
             .then(response => response.data)
             .then(data => setFormData(data))
             .catch(error => console.log(error))
-    }, [])
+    }, [user]);
 
     const handleSubmit = () => {
         axios.patch("http://localhost:4000/auth/update/", {

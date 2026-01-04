@@ -104,6 +104,18 @@ class UserController {
             next(new HttpError(500, error));
         }
     }
+    async decode(request, response, next) {
+        try {
+            const token = request.headers["authorization"].split(" ")[1];
+            const data = JWTHandler.verifyToken(token);
+
+            const userData = Object.fromEntries(Object.entries(data).slice(0, 3));
+            response.status(201).send(userData);
+
+        } catch (error) {
+            next(new HttpError(500, error));
+        }
+    }
 }
 
 export default new UserController;

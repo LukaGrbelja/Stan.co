@@ -1,10 +1,9 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const UserContext = createContext();
 
 const UserContextProvider = ({ children }) => {
-
-    // jwt token???
 
     const [user, setUser] = useState({
         userName: "",
@@ -13,7 +12,10 @@ const UserContextProvider = ({ children }) => {
     });
 
     const logIn = ({ userData }) => {
-        const { userName, userType, profilePicture } = userData;
+
+        const { userName, userType, profilePicture, token } = userData;
+        localStorage.setItem("token", token);
+
         setUser({
             userName: userName,
             userType: userType,
@@ -25,9 +27,21 @@ const UserContextProvider = ({ children }) => {
         setUser({
             userName: "",
             userType: "",
-            profilePicture: ""
+            profilePicture: "",
+            token: ""
         });
     }
+
+    useEffect(() => {
+        axios({
+            method: "GET",
+            url: "http://localhost:4000/auth/decode/",
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
+            .then(response => response.data)
+            .then(data => setUser(data))
+            .catch(error => console.log(error))
+    });
 
     return (
         <UserContext.Provider value={{ user, logIn, logOut }}>

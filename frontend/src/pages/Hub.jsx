@@ -33,7 +33,6 @@ function Hub() {
                         aptList.length !== 0 ?
                             aptList.map(apt => <AptCard key={apt._id} aptData={apt} />)
                             :
-
                             <li className="list-group-item bg-dark-subtle w-100 border border-primary-subtle round p-2">Trenutno nemate stanova</li>
                     }
                     <Link to="../appForm" className="btn btn-primary mt-2">

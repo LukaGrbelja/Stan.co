@@ -17,6 +17,7 @@ class UserController {
             const responseObject = {
                 userName: dbResponse.userName,
                 userType: dbResponse.userType,
+                userId: dbResponse._id,
                 profilePicture: dbResponse.profilePicture
             }
 
@@ -96,9 +97,20 @@ class UserController {
     }
     async get(request, response, next) {
         try {
-            const data = await userInteractor.get(request.query.userName);
+            let data;
+            if (request.query.userName) {
+                data = await userInteractor.get(request.query.userName);
+                //daj mogucnost da podatci nisu postavljeni
+                response.status(201).send(data.additionalData);
+            }
+            else {
+                data = await userInteractor.getById(request.query.id);
 
-            response.status(201).send(data.additionalData);
+                data.additionalData.userType = data.userType;
+                data.additionalData.profilePicture = data.profilePicture;
+
+                response.status(201).send(data.additionalData);
+            }
 
         } catch (error) {
             next(new HttpError(500, error));

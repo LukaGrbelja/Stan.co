@@ -52,6 +52,10 @@ class UserInteractor {
         return await userRepository.get(filter);
     }
 
+    async getById(id) {
+        return await userRepository.getById(id);
+    }
+
 }
 
 export default new UserInteractor;

@@ -4,6 +4,8 @@ class UserRepository {
 
     async get(entity) { return UserModel.findOne({ userName: entity }); }
 
+    async getById(id) { return UserModel.findById(id); }
+
     async create(entity) {
 
         const newUser = new UserModel(entity);

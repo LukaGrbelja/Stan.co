@@ -28,6 +28,7 @@ function Profile() {
             .then(response => response.data)
             .then(data => setFormData(data))
             .catch(error => console.log(error))
+        
     }, [user]);
 
     const handleSubmit = () => {
@@ -64,8 +65,9 @@ function Profile() {
                             />
                         </div>
                         {
-                            user.userType === "cimer" ?
+                            user?.userType === "Cimer" ?
                                 <>
+                                    <h5>Dodatne informacije</h5>
                                     <div className="form-floating mb-3">
                                         <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled"  value={formData.interests}
                                             onChange={(e) => {

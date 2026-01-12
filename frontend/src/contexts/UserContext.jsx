@@ -8,28 +8,31 @@ const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState({
         userName: "",
         userType: "",
+        userId: "",
         profilePicture: ""
     });
 
     const logIn = ({ userData }) => {
 
-        const { userName, userType, profilePicture, token } = userData;
+        const { userName, userType, userId, profilePicture, token } = userData;
         localStorage.setItem("token", token);
 
         setUser({
             userName: userName,
             userType: userType,
+            userId: userId,
             profilePicture: profilePicture
-        })
+        });
     }
 
     const logOut = () => {
         setUser({
             userName: "",
             userType: "",
-            profilePicture: "",
-            token: ""
+            userId: "",
+            profilePicture: ""
         });
+        localStorage.removeItem("token");
     }
 
     useEffect(() => {
@@ -41,7 +44,7 @@ const UserContextProvider = ({ children }) => {
             .then(response => response.data)
             .then(data => setUser(data))
             .catch(error => console.log(error))
-    });
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, logIn, logOut }}>

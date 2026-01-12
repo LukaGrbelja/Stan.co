@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import axios from "axios";
 import imgPlaceholder from "../assets/pictures/aptPlaceholderImg.webp";
 
@@ -92,23 +92,37 @@ function ApartmentView() {
                                 </tr>
                             </tbody>
                         </table>
+                        <h5 className="card-title mb-3">{aptData.address}</h5>
                     </div>
                 </div >
             </div>
-            <div className="mb-5">
-                <div className="form-floating mb-3">
+            <div className="mb-5 row">
+                <div className="form-floating mb-3 col-12">
                     <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" defaultValue={aptData.description} disabled></textarea>
-                    <label htmlFor="floatingTextarea2Disabled">Opis</label>
+                    <label className="ms-2" htmlFor="floatingTextarea2Disabled">Opis</label>
                 </div>
-                <h5>Ocjena:</h5>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
+                <div className="col-4">
+                    <h5>Ocjena:</h5>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+                    <span className="fa fa-star"></span>
+                    <span className="fa fa-star"></span>
+                    <span className="fa fa-star"></span>
+                    <span className="fa fa-star"></span>
+                    <span className="fa fa-star"></span>
+                </div>
+                <div className="col-4">
+                    <Link to={"/UI/userView/" + aptData.owner} className="btn btn-primary mt-2">
+                        Profil stanodavca
+                    </Link>
+                </div>
+                <div className="col-4">
+                    <Link to="" className="btn btn-primary mt-2">
+                        Pošalji rezervaciju
+                    </Link>
+                </div>
             </div>
-        </>)
+        </>
+    );
 }
 
 export default ApartmentView;

@@ -19,6 +19,19 @@
     background-color: #f1f3f5;
 }
 
+.chat-page .list-group-item img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+.fw-bold {
+    display: inline-block;
+}
+
 /* ========== CHAT WINDOW ========== */
 
 .chat-page .col-lg-8,
@@ -63,18 +76,23 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0px;
     background-color: #f8f9fa;
 }
 
 /* Svaka poruka (div unutar .d-flex) */
-.chat-page .d-flex>div {
+.chat-page .d-flex>div,
+.chat-page .d-flex>form {
     max-width: 100%;
     padding: 10px 14px;
     border-radius: 16px;
     font-size: 0.95rem;
     word-break: break-word;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-page .flex-grow-1 .d-flex>div {
+    margin-bottom: 0.05rem;
 }
 
 /* Poruke drugih (lijevo) */

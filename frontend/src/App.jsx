@@ -11,6 +11,7 @@ import PreView from "./pages/PreView";
 import Registration from "./pages/Registration";
 import AptForm from "./pages/AptForm";
 import ApartmentView from "./pages/ApartmentView";
+import UserView from "./pages/UserView";
 import "./App.css";
 import ErrorPage from "./pages/Error";
 import RedirectComponent from "./pages/RedirectComponent";
@@ -30,6 +31,7 @@ function App() {
 							<Route path="profile" element={<Profile />} />
 							<Route path="appForm" element={<AptForm />} />
 							<Route path="apartmentView/:id" element={<ApartmentView />} />
+							<Route path="userView/:id" element={<UserView />} />
 						</Route>
 					</Route>
 					<Route path="/PI" element={<Content />}>
@@ -38,7 +40,7 @@ function App() {
 					</Route>
 					<Route path='*' element={<Content />}>
 						<Route index element={<RedirectComponent />} />
-						<Route path='*' element={<ErrorPage />}/>
+						<Route path='*' element={<ErrorPage />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

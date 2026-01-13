@@ -18,7 +18,7 @@ class CommunicationController {
                 const headerData = {
                     ...usersData,
                     type: "Header",
-                    allowed: false
+                    allowed: "false"
                 }
                 const mongodbResponse = await commRepo.create(headerData);
 
@@ -121,6 +121,27 @@ class CommunicationController {
             }
 
             response.status(200).send(data);
+        } catch (error) {
+            next(new HttpError(500, error));
+        }
+    }
+    async changeHeaderPermission(request, response, next) {
+        try {
+
+            const usersData = Object.fromEntries(Object.entries(request.body).splice(0, 2));
+
+            const filterData = {
+                ...usersData,
+                type: "Header"
+            };
+
+            const updateData = {
+                allowed: request.body.data
+            };
+
+            await commRepo.update(filterData, updateData);
+
+            response.status(200).send("Header updated successfully");
         } catch (error) {
             next(new HttpError(500, error));
         }

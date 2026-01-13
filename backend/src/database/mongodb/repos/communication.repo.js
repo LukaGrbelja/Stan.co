@@ -11,6 +11,8 @@ class CommunicationRepository {
         return newApt;
 
     }
+
+    async update(param, change) { return CommunicationModel.updateOne(param, { $set: change }); }
 }
 
 export default new CommunicationRepository;

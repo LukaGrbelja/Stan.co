@@ -19,9 +19,23 @@ function UserView() {
     });
 
     const [communication, setCommunication] = useState({
-        status: true,
+        status: "none",
         message: ""
     });
+
+    const [report, setReport] = useState({
+        reason: "",
+        description: "",
+        status: "pending"
+    });
+
+    const reportReasons = [
+        { value: "spam", label: "Spam ili neželjene poruke" },
+        { value: "harassment", label: "Uznemiravanje ili uvredljivo ponašanje" },
+        { value: "inappropriate", label: "Neprimjeren sadržaj" },
+        { value: "fake", label: "Lažni profil ili lažne informacije" },
+        { value: "other", label: "Nešto drugo" }
+    ];
 
     const { user } = useContext(UserContext);
 
@@ -48,11 +62,10 @@ function UserView() {
             })
                 .then(response => response.data)
                 .then(data => {
-                    console.log(data);
                     if (data !== "No communication header found") {
                         setCommunication({
                             ...communication,
-                            status: false
+                            status: communication.status === "blocked" ? "blocked" : "established"
                         });
                     }
                 })
@@ -68,11 +81,57 @@ function UserView() {
             data: communication.message
         })
             .then(response => response.data)
-            .then(data => {
+            .then(() => {
                 setCommunication({
                     ...communication,
-                    status: false
+                    status: "established"
                 });
+            })
+            .catch(error => console.log(error));
+    }
+
+    const handleBlock = () => {
+        axios.put("http://localhost:4000/comms/changeHeader/", {
+            sender: user.userId,
+            receiver: id,
+            data: communication.status === "blocked" ? "true" : "blocked"
+        })
+            .then(response => response.data)
+            .then(() => {
+                setCommunication({
+                    ...communication,
+                    status: communication.status === "blocked" ? "true" : "blocked"
+                });
+            })
+            .catch(error => console.log(error));
+    }
+
+    const handleReport = () => {
+        axios.post("http://localhost:4000/report/createReport", {
+            reporter: user.userId,
+            reportedUser: id,
+            reason: report.reason,
+            description: report.description
+        })
+            .then(response => response.status)
+            .then(status => {
+                if (status === 201) {
+                    console.log("Report submitted successfully.");
+                    setReport({
+                        reason: "",
+                        description: "",
+                        status: "success"
+                    });
+                }
+                else {
+                    console.log("Report submission failed.");
+                    setReport({
+                        reason: "",
+                        description: "",
+                        status: "failed"
+                    });
+                }
+
             })
             .catch(error => console.log(error));
     }
@@ -112,25 +171,124 @@ function UserView() {
                         </div>
                     </>
             }
-            {
-                communication.status === true ?
-                    <Form handleSubmit={handleSubmit}>
-                        <TextArea data={{
-                            name: "commStart",
-                            label: "Započnite komunikaciju",
-                            saveValue: (inputValue) => setCommunication({
-                                ...communication,
-                                message: inputValue
-                            })
-                        }} />
-                        <button type="submit" className="btn btn-primary w-100">Start</button>
-                    </Form>
-                    :
-                    <Link to="/" className="btn btn-primary mt-2">
-                        Idi na chat
-                    </Link>
-            }
+            <div className="d-flex gap-2 my-3">
+                <button className="btn btn-danger flex-fill" onClick={handleBlock}>
+                    {communication.status === "blocked" ? "Odblokiraj korisnika" : "Blokiraj korisnika"}
+                </button>
+                <button className="btn btn-outline-danger flex-fill" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    Prijavi kršenje smjernica
+                </button>
+            </div>
+            <div className="modal fade" id="reportModal" tabIndex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
 
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="reportModalLabel">Prijavi kršenje smjernica</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                        </div>
+
+                        <div className="modal-body">
+
+                            <p className="text-muted mb-3">
+                                Odaberite razlog prijave. Vaša prijava ostaje anonimna.
+                            </p>
+
+                            <div className="list-group mb-3">
+
+                                {
+                                    reportReasons.map((reason) => (
+                                        <label className="list-group-item" key={reason.value}>
+                                            <input
+                                                className="form-check-input me-2" type="radio" name="reportReason" value={reason.value}
+                                                onClick={(e) => setReport({ ...report, reason: e.target.value })} />
+                                            {reason.label}
+                                        </label>
+                                    ))
+                                }
+
+
+                            </div>
+
+                            <div className="form-floating">
+                                <textarea
+                                    className="form-control"
+                                    placeholder="Opišite problem"
+                                    id="reportDescription"
+                                    style={{ height: "120px" }}
+                                    onChange={(e) => setReport({ ...report, description: e.target.value })}
+                                ></textarea>
+                                <label htmlFor="reportDescription">Dodatni opis (opcionalno)</label>
+                            </div>
+
+                        </div>
+
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                Odustani
+                            </button>
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#responseModal" onClick={handleReport}>
+                                Pošalji prijavu
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div className="modal fade" id="responseModal" tabIndex="-1" aria-labelledby="responseModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="reportModalLabel">Status prijave</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                        </div>
+
+                        <div className="modal-body">
+                            {report.status === "pending" &&
+                                <p>Slanje prijave...</p>
+                            }
+                            {
+                                report.status === "success" &&
+                                <div className="alert alert-success" role="alert">
+                                    Vaša prijava je uspješno poslana. Hvala vam što pomažete u održavanju naše zajednice sigurnom i ugodnom za sve korisnike.
+                                </div>
+                            }
+                            {
+                                report.status === "failed" &&
+                                <div className="alert alert-danger" role="alert">
+                                    Došlo je do pogreške prilikom slanja vaše prijave. Molimo pokušajte ponovno kasnije.
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {
+                communication.status === "blocked" ? <></> :
+                    <>
+                        {
+                            communication.status === "none" ?
+                                <Form handleSubmit={handleSubmit}>
+                                    <TextArea data={{
+                                        name: "commStart",
+                                        label: "Započnite komunikaciju",
+                                        saveValue: (inputValue) => setCommunication({
+                                            ...communication,
+                                            message: inputValue
+                                        })
+                                    }} />
+                                    <button type="submit" className="btn btn-primary w-100">Start</button>
+                                </Form>
+                                :
+                                <Link to="/" className="btn btn-primary mt-2">
+                                    Idi na chat
+                                </Link>
+                        }
+                    </>
+            }
         </>
     );
 }

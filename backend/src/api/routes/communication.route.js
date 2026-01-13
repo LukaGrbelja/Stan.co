@@ -19,4 +19,8 @@ commsRouter.get("/getHeaders", (request, response, next) => {
     commsController.getHeaders(request, response, next);
 });
 
+commsRouter.put("/changeHeader", (request, response, next) => {
+    commsController.changeHeaderPermission(request, response, next);
+});
+
 export default commsRouter;

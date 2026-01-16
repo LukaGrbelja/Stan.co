@@ -6,7 +6,8 @@ const CommunicationSchema = new Schema({
     receiver: { type: Schema.Types.ObjectId, ref: "User"},
     chatId: { type: Schema.Types.ObjectId, ref: "Comms" },
     message: { type: String },
-    allowed: { type: String }
+    allowed: { type: String },
+    additionalData: { type: Object }
 });
 
 const CommunicationModel = model("Comms", CommunicationSchema, "comms");

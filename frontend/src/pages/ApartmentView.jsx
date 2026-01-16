@@ -65,9 +65,7 @@ function ApartmentView() {
                         </button>
                     </div>
                 </div>
-                <div className="col-md-4" onClick={() => {
-                    console.log(aptData);
-                }}>
+                <div className="col-md-4">
                     <div className="card-body">
                         <center>
                             <h5 className="card-title mb-3">{aptData.address}</h5>
@@ -101,7 +99,7 @@ function ApartmentView() {
                     <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" defaultValue={aptData.description} disabled></textarea>
                     <label className="ms-2" htmlFor="floatingTextarea2Disabled">Opis</label>
                 </div>
-                <div className="col-4">
+                <div className="col-6">
                     <h5>Ocjena:</h5>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
                     <span className="fa fa-star"></span>
@@ -110,14 +108,9 @@ function ApartmentView() {
                     <span className="fa fa-star"></span>
                     <span className="fa fa-star"></span>
                 </div>
-                <div className="col-4">
+                <div className="col-6 d-flex justify-content-center">
                     <Link to={"/UI/userView/" + aptData.owner} className="btn btn-primary mt-2">
                         Profil stanodavca
-                    </Link>
-                </div>
-                <div className="col-4">
-                    <Link to="" className="btn btn-primary mt-2">
-                        Pošalji rezervaciju
                     </Link>
                 </div>
             </div>

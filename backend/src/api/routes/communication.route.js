@@ -23,4 +23,8 @@ commsRouter.put("/changeHeader", (request, response, next) => {
     commsController.changeHeaderPermission(request, response, next);
 });
 
+commsRouter.put("/changeReservationStatus", (request, response, next) => {
+    commsController.updateReservationStatus(request, response, next);
+});
+
 export default commsRouter;

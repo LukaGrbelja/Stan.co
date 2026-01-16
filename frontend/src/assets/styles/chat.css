@@ -103,9 +103,17 @@
 }
 
 /* Moje poruke (desno) */
-.chat-page .justify-content-end>div {
+.chat-page .justify-content-end>div,
+.chat-page .justify-content-end>.card>.list-group>.list-group-item {
     background-color: #007bff;
     color: white;
+}
+
+.chat-page .card>.list-group>.list-group-item {
+    border: none;
+    border-collapse: collapse;
+    border-bottom: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6;
 }
 
 /* ========== INPUT BAR ========== */

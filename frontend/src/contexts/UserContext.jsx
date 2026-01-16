@@ -36,6 +36,9 @@ const UserContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            return;;
+        }
         axios({
             method: "GET",
             url: "http://localhost:4000/auth/decode/",

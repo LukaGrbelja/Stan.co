@@ -32,6 +32,23 @@ class CommunicationController {
 
                 response.status(201).send("Communication created successfully");
             }
+            else if (type === "reservation") {
+                const messageData = {
+                    chatId: request.body.chatId,
+                    sender: request.body.sender,
+                    type: "Reservation",
+                    additionalData: {
+                        ...request.body.data,
+                        status: "pending"
+                    }
+                }
+                console.log(messageData);
+                const newMessage = await commRepo.create(messageData);
+                console.log(newMessage);
+
+
+                response.status(201).send(newMessage);
+            }
             else {
                 const messageData = {
                     chatId: request.body.chatId,
@@ -52,7 +69,7 @@ class CommunicationController {
         try {
             const filterData = {
                 ...request.query.id,
-                type: "Message"
+                type: { $in: ["Message", "Reservation"] }
             }
             const data = await commRepo.get(filterData);
 
@@ -142,6 +159,27 @@ class CommunicationController {
             await commRepo.update(filterData, updateData);
 
             response.status(200).send("Header updated successfully");
+        } catch (error) {
+            next(new HttpError(500, error));
+        }
+    }
+    async updateReservationStatus(request, response, next) {
+        try {
+
+            const { messageId, newStatus } = Object.fromEntries(Object.entries(request.body).splice(0, 2));
+
+            const filterData = {
+                _id: messageId,
+                type: "Reservation"
+            };
+
+            const updateData = {
+                'additionalData.status': newStatus
+            };
+
+            await commRepo.update(filterData, updateData);
+
+            response.status(200).send();
         } catch (error) {
             next(new HttpError(500, error));
         }

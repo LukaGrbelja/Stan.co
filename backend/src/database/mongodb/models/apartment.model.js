@@ -16,7 +16,8 @@ const ApartmentSchema = new Schema({
     numOfRooms: { type: Number, required: true },
     pictures: [{ type: String }],
     addEquip: [{ type: String }],
-    description: { type: String }
+    description: { type: String },
+    status: { type: String, enum: ["available", "unavailable"], default: "available" },
 });
 
 const ApartmentModel = model("apartments", ApartmentSchema);

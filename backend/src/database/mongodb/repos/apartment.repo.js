@@ -11,6 +11,10 @@ class ApartmentRepository {
         return newApt;
 
     }
+
+    async delete(filters) {
+        return ApartmentModel.deleteOne(filters);
+    }
 }
 
 export default new ApartmentRepository;

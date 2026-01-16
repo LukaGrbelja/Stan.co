@@ -1,4 +1,5 @@
 import apartmentInteractor from "../../database/interactors/apartment.interactor.js";
+import apartmentRepo from "../../database/mongodb/repos/apartment.repo.js";
 import userRepo from "../../database/mongodb/repos/user.repo.js"; //makni podhitno // triba se pojavljivat tek u interactoru// strukturiraj serrvise u Interactor datoteki
 import { HttpError } from "../middlewares/errorHandler.js";
 
@@ -61,6 +62,18 @@ class ApartmentController {
             next(new HttpError(500, error));
 
         }
+    }
+
+    async deleteApartment(request, response, next) {
+        try {
+
+            const filters = { ...request.params };
+
+            const responseData = await apartmentRepo.delete(filters);
+            
+            response.status(204).send(responseData);
+
+        } catch (error) { next(new HttpError(500, error)); }
     }
 }
 

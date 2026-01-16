@@ -12,4 +12,6 @@ appRouter.post("/createApt", uploadImg.array("images"), (request, response, next
     apartmentController.newApartment(request, response, next);
 });
 
+appRouter.delete("/:id", apartmentController.deleteApartment)
+
 export default appRouter;

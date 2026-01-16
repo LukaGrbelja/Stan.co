@@ -1,5 +1,5 @@
 import ToggleSwitch from "../components/elements/Form/ToggleSwitch";
-import AptCard from "../components/elements/AptCard";
+import AptCard from "../components/main/AptCard";
 import Form from "../components/elements/Form/Form";
 import Select from "../components/elements/Form/Select";
 import Range from "../components/elements/Form/Range";
